@@ -9,6 +9,7 @@
 
 namespace ZendTest\Config\Writer;
 
+use XmlWriter as PHPXmlWriter;
 use Zend\Config\Writer\Xml as XmlWriter;
 use Zend\Config\Config;
 use Zend\Config\Reader\Xml as XmlReader;
@@ -28,7 +29,23 @@ class XmlTest extends AbstractWriterTestCase
 
     public function testToString()
     {
-        $config = new Config(array('test' => 'foo', 'bar' => array(0 => 'baz', 1 => 'foo')));
+        $config = new Config(array(
+            'test' => 'foo',
+            'bar' => array(
+                0 => 'baz',
+                1 => 'foo'
+            ),
+            'nestedArrayString' => array(
+                'level1key1' => array(
+                    'level2key1' => 'baz',
+                    'level2key2' => 'foo'
+                ),
+                'level1key2' => array(
+                    'level2key3' => 'baz',
+                    'level2key4' => 'foo'
+                ),
+            )
+        ));
 
         $configString = $this->writer->toString($config);
 
@@ -38,6 +55,16 @@ class XmlTest extends AbstractWriterTestCase
     <test>foo</test>
     <bar>baz</bar>
     <bar>foo</bar>
+    <nestedArrayString>
+        <level1key1>
+            <level2key1>baz</level2key1>
+            <level2key2>foo</level2key2>
+        </level1key1>
+        <level1key2>
+            <level2key1>baz</level2key1>
+            <level2key2>foo</level2key2>
+        </level1key2>
+    </nestedArrayString>
 </zend-config>
 
 ECS;
