@@ -71,7 +71,10 @@ class Xml extends AbstractWriter
 
             if ($branchType === 'numeric') {
                 if (is_array($value)) {
-                    $this->addBranch($value, $value, $writer);
+                    if ( is_numeric(key($value))) {
+                        throw new Exception\RuntimeException('Array with more than one numeric level are disallowed');
+                    }
+                    $this->addBranch($branchName, $value, $writer);
                 } else {
                     $writer->writeElement($branchName, (string) $value);
                 }
