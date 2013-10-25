@@ -222,14 +222,6 @@ class Console extends AbstractAdapter
                 // Set the default width of 80
                 $this->width = 80;
 
-                // Try to determine the width through stty
-                ErrorHandler::start();
-                if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
-                    $this->width = (int) $match[1];
-                } elseif (preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) {
-                    $this->width = (int) $match[1];
-                }
-                ErrorHandler::stop();
             }
         } else {
             $this->width = (int) $width;

@@ -42,7 +42,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
     public function testStandardOutputStream()
     {
-        $adapter = new Stub(array('width' => 30));
+        $adapter = new Stub();
 
         $this->assertTrue(is_resource($adapter->getOutputStream()));
 
