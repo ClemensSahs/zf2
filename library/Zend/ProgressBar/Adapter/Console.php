@@ -226,8 +226,8 @@ class Console extends AbstractAdapter
                 ErrorHandler::start();
                 if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
                     $this->width = (int) $match[1];
-                } else {
-                    shell_exec('stty');
+                } elseif (preg_match('#columns = (\d+);#', shell_exec('stty -a'), $match) === 1) {
+                    $this->width = (int) $match[1];
                 }
                 ErrorHandler::stop();
             }
