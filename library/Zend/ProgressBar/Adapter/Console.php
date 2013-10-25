@@ -226,6 +226,8 @@ class Console extends AbstractAdapter
                 ErrorHandler::start();
                 if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
                     $this->width = (int) $match[1];
+                } else {
+                    shell_exec('stty');
                 }
                 ErrorHandler::stop();
             }
