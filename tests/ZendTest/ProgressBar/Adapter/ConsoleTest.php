@@ -39,7 +39,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-/*
     public function testStandardOutputStream()
     {
         $adapter = new Stub();
@@ -60,6 +59,8 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('php://stdout', $metaData['uri']);
     }
 
+
+/*
     public function testManualErrorOutputStream()
     {
         $adapter = new Stub(array('outputStream' => 'php://stderr'));
