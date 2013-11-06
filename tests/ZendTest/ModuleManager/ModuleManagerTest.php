@@ -154,6 +154,7 @@ class ModuleManagerTest extends TestCase
 
         $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
         $moduleManager->getEventManager()->setSharedManager($sharedEvents);
+        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
 
         $this->application = new MockApplication;
         $events            = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
