@@ -22,6 +22,7 @@ use InvalidArgumentException;
 use LoadOtherModule\Module;
 
 use ZendTest\ModuleManager\TestAsset\MockApplication;
+use Zend\ModuleManager\Listener\InitTrigger;
 
 class ModuleManagerTest extends TestCase
 {
@@ -150,20 +151,27 @@ class ModuleManagerTest extends TestCase
 
     public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
     {
+        // setup
         $sharedEvents = new SharedEventManager();
 
         $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
-        $moduleManager->getEventManager()->setSharedManager($sharedEvents);
-        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
+        $moduleManagerEventManger = $moduleManager->getEventManager();
+        $moduleManagerEventManger->setSharedManager($sharedEvents);
+
+        $moduleManagerEventManger->attach('loadModule.resolve', new ModuleResolverListener, 1000);
+        $moduleManagerEventManger->attach('loadModule', new InitTrigger, 1000);
+        $moduleManagerEventManger->attach('loadModule', new OnBootstrapListener, 1000);
 
         $this->application = new MockApplication;
         $events            = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
         $events->setSharedManager($sharedEvents);
         $this->application->setEventManager($events);
 
+        // run
         $moduleManager->loadModules();
         $this->application->bootstrap();
 
+        // assert
         $module = array(
             'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
             'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
