@@ -12,6 +12,7 @@ namespace ZendTest\ModuleManager;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\SharedEventManager;
 use Zend\Loader\AutoloaderFactory;
 use Zend\ModuleManager\Listener\ListenerOptions;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate;
@@ -143,6 +144,31 @@ class ModuleManagerTest extends TestCase
         $config = $configListener->getMergedConfig();
         $this->assertTrue(isset($config['loaded']));
         $this->assertSame('oh, yeah baby!', $config['loaded']);
+    }
+
+    public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
+    {
+        $sharedEvents = new SharedEventManager();
+
+        $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
+        $moduleManager->getEventManager()->setSharedManager($sharedEvents);
+
+        $this->application = new MockApplication;
+        $events            = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
+        $events->setSharedManager($sharedEvents);
+        $this->application->setEventManager($events);
+
+        $moduleManager->loadModules();
+        $this->application->bootstrap();
+
+        $module = array(
+            'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
+            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
+            'BarModule'=>$moduleManager->getModule('BarModule') );
+
+        $this->assertTrue ( $module['LoadSomeOtherModule']->isBootstrapped );
+        $this->assertTrue ( $module['LoadOtherModule']->isBootstrapped );
+
     }
 
     public function testModuleIsMarkedAsLoadedWhenLoadModuleEventIsTriggered()
