@@ -18,6 +18,7 @@ use Zend\ModuleManager\Listener\DefaultListenerAggregate;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManager;
 use InvalidArgumentException;
+use LoadOtherModule\Module;
 
 class ModuleManagerTest extends TestCase
 {
@@ -142,6 +143,26 @@ class ModuleManagerTest extends TestCase
         $config = $configListener->getMergedConfig();
         $this->assertTrue(isset($config['loaded']));
         $this->assertSame('oh, yeah baby!', $config['loaded']);
+    }
+
+    public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
+    {
+        $configListener = $this->defaultListeners->getConfigListener();
+        $moduleManager  = new ModuleManager(array('LoadOtherModule'));
+        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
+        $moduleManager->loadModules();
+
+        $config = $configListener->getMergedConfig();
+        $assertConfig = array(
+            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule')->getConfig(),
+            'BarModule'=>$moduleManager->getModule('BarModule')->getConfig()
+        );
+
+        $this->assertTrue(isset($config['loaded']));
+        $this->assertSame($assertConfig['LoadOtherModule']['loaded'], $config['loaded']);
+
+        $this->assertTrue(isset($config['bar']));
+        $this->assertSame($assertConfig['BarModule']['bar'], $config['bar']);
     }
 
     public function testModuleIsMarkedAsLoadedWhenLoadModuleEventIsTriggered()
