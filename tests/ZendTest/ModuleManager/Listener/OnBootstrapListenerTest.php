@@ -80,4 +80,21 @@ class OnBootstrapListenerTest extends TestCase
         $modules = $moduleManager->getLoadedModules();
         $this->assertTrue($modules['ListenerTestModule']->onBootstrapCalled);
     }
+
+    public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
+    {
+        $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
+        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
+        $moduleManager->loadModules();
+
+        $module = array(
+            'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
+            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
+            'BarModule'=>$moduleManager->getModule('BarModule') );
+
+        $this->assertTrue ( $module['LoadSomeOtherModule']->isBootstrapped );
+        $this->assertTrue ( $module['LoadOtherModule']->isBootstrapped );
+
+    }
+
 }
