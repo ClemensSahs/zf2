@@ -21,6 +21,8 @@ use Zend\ModuleManager\ModuleManager;
 use InvalidArgumentException;
 use LoadOtherModule\Module;
 
+use ZendTest\ModuleManager\TestAsset\MockApplication;
+
 class ModuleManagerTest extends TestCase
 {
     public function setUp()
