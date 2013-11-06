@@ -83,7 +83,8 @@ class OnBootstrapListenerTest extends TestCase
 
     public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
     {
-        $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
+        $moduleManager = $this->moduleManager;
+        $moduleManager->setModules(array('LoadSomeOtherModule'));
         $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
         $moduleManager->loadModules();
 
