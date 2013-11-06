@@ -85,9 +85,9 @@ class OnBootstrapListenerTest extends TestCase
     {
         $moduleManager = $this->moduleManager;
         $moduleManager->setModules(array('LoadSomeOtherModule'));
-        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
         $moduleManager->loadModules();
 
+        $this->application->bootstrap();
         $module = array(
             'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
             'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
