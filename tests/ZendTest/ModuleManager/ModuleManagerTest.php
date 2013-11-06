@@ -148,21 +148,27 @@ class ModuleManagerTest extends TestCase
     public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
     {
         $configListener = $this->defaultListeners->getConfigListener();
-        $moduleManager  = new ModuleManager(array('LoadOtherModule'));
+        $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
         $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
         $moduleManager->loadModules();
 
+        $module = array(
+            'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
+            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
+            'BarModule'=>$moduleManager->getModule('BarModule') );
+
+        $this->assertTrue ( $module['LoadSomeOtherModule']->isBootstrapped );
+        $this->assertTrue ( $module['LoadOtherModule']->isBootstrapped );
+
         $config = $configListener->getMergedConfig();
-        $assertConfig = array(
-            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule')->getConfig(),
-            'BarModule'=>$moduleManager->getModule('BarModule')->getConfig()
-        );
 
+        $moduleConfig = $module['LoadOtherModule']->getConfig();
         $this->assertTrue(isset($config['loaded']));
-        $this->assertSame($assertConfig['LoadOtherModule']['loaded'], $config['loaded']);
+        $this->assertSame($moduleConfig['loaded'], $config['loaded']);
 
+        $moduleConfig = $module['BarModule']->getConfig();
         $this->assertTrue(isset($config['bar']));
-        $this->assertSame($assertConfig['BarModule']['bar'], $config['bar']);
+        $this->assertSame($moduleConfig['bar'], $config['bar']);
     }
 
     public function testModuleIsMarkedAsLoadedWhenLoadModuleEventIsTriggered()
