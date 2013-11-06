@@ -158,7 +158,6 @@ class ModuleManagerTest extends TestCase
         $moduleManagerEventManger = $moduleManager->getEventManager();
         $moduleManagerEventManger->setSharedManager($sharedEvents);
 
-        $moduleManagerEventManger->attach('loadModule.resolve', new ModuleResolverListener, 1000);
         $moduleManagerEventManger->attach('loadModule', new InitTrigger, 1000);
         $moduleManagerEventManger->attach('loadModule', new OnBootstrapListener, 1000);
 
