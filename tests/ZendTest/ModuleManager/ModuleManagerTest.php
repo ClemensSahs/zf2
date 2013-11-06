@@ -14,6 +14,8 @@ use stdClass;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\SharedEventManager;
 use Zend\Loader\AutoloaderFactory;
+use Zend\ModuleManager\Listener\InitTrigger;
+use Zend\ModuleManager\Listener\OnBootstrapListener;
 use Zend\ModuleManager\Listener\ListenerOptions;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate;
 use Zend\ModuleManager\ModuleEvent;
@@ -22,7 +24,6 @@ use InvalidArgumentException;
 use LoadOtherModule\Module;
 
 use ZendTest\ModuleManager\TestAsset\MockApplication;
-use Zend\ModuleManager\Listener\InitTrigger;
 
 class ModuleManagerTest extends TestCase
 {
