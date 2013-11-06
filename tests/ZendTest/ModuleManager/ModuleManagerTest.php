@@ -17,6 +17,7 @@ use Zend\Loader\AutoloaderFactory;
 use Zend\ModuleManager\Listener\InitTrigger;
 use Zend\ModuleManager\Listener\OnBootstrapListener;
 use Zend\ModuleManager\Listener\ListenerOptions;
+use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManager;
@@ -159,7 +160,8 @@ class ModuleManagerTest extends TestCase
         $moduleManagerEventManger = $moduleManager->getEventManager();
         $moduleManagerEventManger->setSharedManager($sharedEvents);
 
-        $moduleManagerEventManger->attach('loadModule', new InitTrigger, 1000);
+        $moduleManagerEventManger->attach('loadModule.resolve', new ModuleResolverListener, 1000);
+        $moduleManagerEventManger->attach('loadModule', new InitTrigger($listenerOption), 1000);
         $moduleManagerEventManger->attach('loadModule', new OnBootstrapListener, 1000);
 
         $this->application = new MockApplication;
