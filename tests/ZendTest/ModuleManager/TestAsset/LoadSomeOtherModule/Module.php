@@ -29,5 +29,3 @@ class Module
         $this->isBootstrapped = true;
     }
 }
-
-
