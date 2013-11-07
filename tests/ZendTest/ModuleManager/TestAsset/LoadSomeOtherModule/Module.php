@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace LoadOtherModule;
+namespace LoadSomeOtherModule;
 
 
 class Module
@@ -16,12 +16,12 @@ class Module
 
     public function init($moduleManager)
     {
-        $moduleManager->loadModule('BarModule');
+        $moduleManager->loadModule('LoadOtherModule');
     }
 
     public function getConfig()
     {
-        return array('loaded' => 'oh, yeah baby!');
+        return array('loaded_master' => 'foobar');
     }
 
     public function onBootstrap($e)

@@ -12,12 +12,20 @@ namespace ZendTest\ModuleManager;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\SharedEventManager;
 use Zend\Loader\AutoloaderFactory;
+use Zend\ModuleManager\Listener\InitTrigger;
+use Zend\ModuleManager\Listener\OnBootstrapListener;
 use Zend\ModuleManager\Listener\ListenerOptions;
+use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManager;
 use InvalidArgumentException;
+use LoadOtherModule\Module;
+
+use ZendTest\ModuleManager\TestAsset\MockApplication;
+use Zend\ServiceManager\ServiceManager;
 
 class ModuleManagerTest extends TestCase
 {
@@ -142,6 +150,39 @@ class ModuleManagerTest extends TestCase
         $config = $configListener->getMergedConfig();
         $this->assertTrue(isset($config['loaded']));
         $this->assertSame('oh, yeah baby!', $config['loaded']);
+    }
+
+    public function testCanLoadModuleDuringTheLoadModuleEventWithoutPredefine()
+    {
+        // setup
+        $sharedEvents = new SharedEventManager();
+
+        $moduleManager  = new ModuleManager(array('LoadSomeOtherModule'));
+        $moduleManagerEventManger = $moduleManager->getEventManager();
+        $moduleManagerEventManger->setSharedManager($sharedEvents);
+
+        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
+
+        $application = new MockApplication;
+        $application->setServiceManager(new ServiceManager());
+
+        $events = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
+        $events->setSharedManager($sharedEvents);
+        $application->setEventManager($events);
+
+        // run
+        $moduleManager->loadModules();
+        $application->bootstrap();
+
+        // assert
+        $module = array(
+            'LoadSomeOtherModule'=>$moduleManager->getModule('LoadSomeOtherModule'),
+            'LoadOtherModule'=>$moduleManager->getModule('LoadOtherModule'),
+            'BarModule'=>$moduleManager->getModule('BarModule') );
+
+        $this->assertTrue ( $module['LoadSomeOtherModule']->isBootstrapped );
+        $this->assertTrue ( $module['LoadOtherModule']->isBootstrapped );
+
     }
 
     public function testModuleIsMarkedAsLoadedWhenLoadModuleEventIsTriggered()
