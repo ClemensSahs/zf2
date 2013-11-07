@@ -25,6 +25,7 @@ use InvalidArgumentException;
 use LoadOtherModule\Module;
 
 use ZendTest\ModuleManager\TestAsset\MockApplication;
+use Zend\ServiceManager\ServiceManager;
 
 class ModuleManagerTest extends TestCase
 {
@@ -160,18 +161,18 @@ class ModuleManagerTest extends TestCase
         $moduleManagerEventManger = $moduleManager->getEventManager();
         $moduleManagerEventManger->setSharedManager($sharedEvents);
 
-        $moduleManagerEventManger->attach('loadModule.resolve', new ModuleResolverListener, 1000);
-        $moduleManagerEventManger->attach('loadModule', new InitTrigger, 1000);
-        $moduleManagerEventManger->attach('loadModule', new OnBootstrapListener, 1000);
+        $moduleManager->getEventManager()->attachAggregate($this->defaultListeners);
 
-        $this->application = new MockApplication;
-        $events            = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
+        $application = new MockApplication;
+        $application->setServiceManager(new ServiceManager());
+
+        $events = new EventManager(array('Zend\Mvc\Application', 'ZendTest\Module\TestAsset\MockApplication', 'application'));
         $events->setSharedManager($sharedEvents);
-        $this->application->setEventManager($events);
+        $application->setEventManager($events);
 
         // run
         $moduleManager->loadModules();
-        $this->application->bootstrap();
+        $application->bootstrap();
 
         // assert
         $module = array(
