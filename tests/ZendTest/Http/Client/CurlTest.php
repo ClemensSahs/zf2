@@ -202,7 +202,6 @@ class CurlTest extends CommonHttpTests
      */
     public function testPutFileHandleWithHttpClient()
     {
-        die(__METHOD__);
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
         $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
             '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
@@ -219,9 +218,9 @@ class CurlTest extends CommonHttpTests
             'curloptions' => array(CURLOPT_INFILE => $putFileHandle, CURLOPT_INFILESIZE => $putFileSize)
         ));
         $this->client->setMethod('PUT');
+        die(__METHOD__);
         $this->client->send();
         $this->assertEquals(gzcompress($putFileContents), gzcompress($this->client->getResponse()->getBody()));
-        die(__METHOD__);
     }
 
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
