@@ -38,6 +38,7 @@
                 If there's a way of having this without the explicit component
                 list, please PR
             -->
+        	<!--
             <component-test component="Authentication"/>
             <component-test component="Barcode"/>
             <component-test component="Cache"/>
@@ -56,7 +57,9 @@
             <component-test component="File"/>
             <component-test component="Filter"/>
             <component-test component="Form"/>
+            -->
             <component-test component="Http"/>
+        	<!--
             <component-test component="I18n"/>
             <component-test component="InputFilter"/>
             <component-test component="Json"/>
@@ -87,6 +90,7 @@
             <component-test component="Version"/>
             <component-test component="View"/>
             <component-test component="XmlRpc"/>
+            -->
             <check-cs/>
         </parallel>
     </target>
