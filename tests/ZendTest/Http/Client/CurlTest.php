@@ -220,6 +220,7 @@ class CurlTest extends CommonHttpTests
         $this->client->setMethod('PUT');
         $this->client->send();
         $this->assertEquals(gzcompress($putFileContents), gzcompress($this->client->getResponse()->getBody()));
+        die(__METHOD__);
     }
 
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
