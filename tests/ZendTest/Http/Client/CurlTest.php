@@ -219,6 +219,7 @@ class CurlTest extends CommonHttpTests
         ));
         $this->client->setMethod('PUT');
         $this->client->send();
+        die(__METHOD__);
         var_dump(md5($this->client->getResponse()->getBody()),substr($this->client->getResponse()->getBody(), 0,25));
         die(__METHOD__);
         $this->assertEquals(gzcompress($putFileContents), gzcompress($this->client->getResponse()->getBody()));
