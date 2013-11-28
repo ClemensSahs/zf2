@@ -9,6 +9,11 @@ php:
 before_install:
  - cp tests/TestConfiguration.php.travis tests/TestConfiguration.php
 
+
+before_script:
+ - sh -c "if [ '$TRAVIS_PHP_VERSION' = '5.4' ]; then echo 'starting PHP server on port 8080'; php -S localhost:8080 -t tests/ & fi"
+
+
 script:
  - ant travis -keep-going
 

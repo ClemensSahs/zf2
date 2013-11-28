@@ -245,9 +245,9 @@ defined('TESTS_ZEND_FORM_RECAPTCHA_PRIVATE_KEY') || define('TESTS_ZEND_FORM_RECA
  * under your web server(s) document root and set this constant to point to the
  * URL of this directory.
  */
-defined('TESTS_ZEND_HTTP_CLIENT_BASEURI') || define('TESTS_ZEND_HTTP_CLIENT_BASEURI', false);
+defined('TESTS_ZEND_HTTP_CLIENT_BASEURI') || define('TESTS_ZEND_HTTP_CLIENT_BASEURI', 'http://localhost:8080/ZendTest/Http/Client/_files/');
 
-defined('TESTS_ZEND_HTTP_CLIENT_ONLINE') || define('TESTS_ZEND_HTTP_CLIENT_ONLINE', false);
+defined('TESTS_ZEND_HTTP_CLIENT_ONLINE') || define('TESTS_ZEND_HTTP_CLIENT_ONLINE', true);
 
 /**
  * Zend\Http\Client\Proxy tests
