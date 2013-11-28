@@ -185,7 +185,6 @@ class CurlTest extends CommonHttpTests
      */
     public function testPutFileContentWithHttpClient()
     {
-        die(__METHOD__);
         // Method 1: Using the binary string of a file to PUT
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
         $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
