@@ -202,7 +202,6 @@ class CurlTest extends CommonHttpTests
      */
     public function testPutFileHandleWithHttpClient()
     {
-        die(__METHOD__);
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
         $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
             '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
@@ -315,7 +314,7 @@ class CurlTest extends CommonHttpTests
      */
     public function testHeadRequest()
     {
-        die(__METHOD__);
+        $this->markTestSkipped("testHeadRequest");
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
         $adapter = new Adapter\Curl();
         $this->client->setAdapter($adapter);
@@ -326,7 +325,7 @@ class CurlTest extends CommonHttpTests
 
     public function testAuthorizeHeader()
     {
-        die(__METHOD__);
+        $this->markTestSkipped("testHeadRequest");
         // We just need someone to talk to
         $this->client->setUri($this->baseuri. 'testHttpAuth.php');
         $adapter = new Adapter\Curl();
@@ -353,7 +352,7 @@ class CurlTest extends CommonHttpTests
      */
     public function testResponseDoesNotDoubleDecodeGzippedBody($encoding,$testFile)
     {
-        die(__METHOD__);
+        $this->markTestSkipped("testHeadRequest");
         $this->client->setUri($testFile);
         $adapter = new Adapter\Curl();
         $adapter->setOptions(array(
