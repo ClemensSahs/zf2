@@ -346,19 +346,28 @@ class CurlTest extends CommonHttpTests
 
     /**
      * @group 4555
+     * @dataProvider dataProviderTestResponseDoesNotDoubleDecodeBody
      */
-    public function testResponseDoesNotDoubleDecodeGzippedBody()
+    public function testResponseDoesNotDoubleDecodeGzippedBody($encoding,$testFile)
     {
-        $this->client->setUri($this->baseuri . 'testCurlGzipData.php');
+        $this->client->setUri($testFile);
         $adapter = new Adapter\Curl();
         $adapter->setOptions(array(
             'curloptions' => array(
-                CURLOPT_ENCODING => '',
+                CURLOPT_ENCODING => $encoding,
             ),
         ));
         $this->client->setAdapter($adapter);
         $this->client->setMethod('GET');
         $this->client->send();
         $this->assertEquals('Success', $this->client->getResponse()->getBody());
+    }
+
+    public function dataProviderTestResponseDoesNotDoubleDecodeBody()
+    {
+        return array(
+            array('',$this->baseuri . 'testCurlGzipData.php'),
+            array('gzip',$this->baseuri . 'testCurlGzipData.php')
+        );
     }
 }
